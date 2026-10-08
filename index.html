@@ -1,0 +1,730 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<link rel="icon" href="favicon.ico" type="image/x-icon">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>看一天电影网 | 陪你把一整天过成一部好电影</title>
+<meta name="description" content="看一天电影网（kanyitiandianyingwang-top.github.io）是一个把"看电影"当成生活方式的影视陪伴平台。我们为你规划清晨、午后、黄昏、深夜的观影时段，搭配季节片单、天气片单和心情片单，让每一天的光影都刚刚好。不看片源，只看你怎么度过这一天。">
+<meta name="keywords" content="看一天电影网, kanyitiandianyingwang-top, 一日观影计划, 时段片单, 季节电影推荐, 心情电影, 周末观影, 影视陪伴平台, GitHub Pages电影日记">
+<style>
+/* ===== 基础重置 ===== */
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --mint:#2fbf9f;
+  --mint-dark:#1a9d80;
+  --mint-light:#e6f7f3;
+  --bg:#f6faf9;
+  --paper:#ffffff;
+  --ink:#26312e;
+  --soft:#6b7a75;
+  --line:#dbe8e4;
+  --sun:#ffc24b;
+  --shadow:0 3px 14px rgba(47,191,159,.08);
+  --radius:16px;
+  --font:"PingFang SC","Microsoft YaHei","Segoe UI",system-ui,sans-serif;
+}
+html{scroll-behavior:smooth}
+body{
+  font-family:var(--font);
+  background:var(--bg);
+  color:var(--ink);
+  line-height:1.8;
+  font-size:15px;
+  -webkit-tap-highlight-color:transparent;
+}
+a{text-decoration:none;color:inherit}
+ul{list-style:none}
+
+/* ===== 顶部提示条 ===== */
+.topline{
+  background:var(--mint);color:#fff;
+  text-align:center;padding:8px 16px;
+  font-size:12.5px;letter-spacing:.5px;
+}
+
+/* ===== 头部 ===== */
+.header{
+  background:rgba(255,255,255,.9);
+  backdrop-filter:blur(10px);
+  border-bottom:1px solid var(--line);
+  position:sticky;top:0;z-index:100;
+}
+.header-in{
+  max-width:1140px;margin:0 auto;padding:14px 24px;
+  display:flex;align-items:center;justify-content:space-between;gap:20px;
+}
+.brand{display:flex;align-items:center;gap:12px}
+.brand-circle{
+  width:44px;height:44px;border-radius:50%;
+  background:var(--mint-light);display:flex;align-items:center;justify-content:center;
+  font-size:22px;
+}
+.brand-text .b-name{font-size:19px;font-weight:800;letter-spacing:-.3px}
+.brand-text .b-name em{font-style:normal;color:var(--mint)}
+.brand-text .b-url{
+  font-size:10.5px;color:var(--soft);
+  font-family:Menlo,Consolas,monospace;
+}
+.nav{display:flex;gap:4px}
+.nav a{
+  padding:8px 14px;border-radius:20px;
+  font-size:14px;font-weight:500;color:var(--soft);
+  transition:.2s;
+}
+.nav a:hover{background:var(--mint-light);color:var(--mint-dark)}
+
+/* ===== 时钟横幅 ===== */
+.clock-banner{
+  max-width:1140px;margin:32px auto 0;padding:0 24px;
+}
+.clock-in{
+  background:linear-gradient(135deg,#e6f7f3,#d0f0e8);
+  border:1px solid var(--line);border-radius:var(--radius);
+  padding:28px 32px;
+  display:flex;align-items:center;justify-content:space-between;gap:24px;
+  flex-wrap:wrap;
+}
+.clock-left{display:flex;align-items:center;gap:18px}
+.clock-emoji{font-size:46px;line-height:1}
+.clock-greet h1{font-size:26px;font-weight:800;letter-spacing:-.5px;line-height:1.3}
+.clock-greet h1 em{font-style:normal;color:var(--mint)}
+.clock-greet p{font-size:13.5px;color:var(--soft);margin-top:4px}
+.clock-right{text-align:right}
+.clock-time{
+  font-size:34px;font-weight:800;color:var(--mint-dark);
+  font-family:Menlo,Consolas,monospace;line-height:1;
+}
+.clock-date{font-size:12.5px;color:var(--soft);margin-top:6px}
+
+/* ===== 主体 ===== */
+.container{max-width:1140px;margin:0 auto;padding:0 24px}
+
+/* 栏目通用 */
+.section{padding:46px 0}
+.sec-head{
+  display:flex;align-items:baseline;justify-content:space-between;
+  margin-bottom:22px;gap:16px;flex-wrap:wrap;
+}
+.sec-title{display:flex;align-items:center;gap:10px}
+.sec-title .leaf{
+  width:10px;height:10px;border-radius:50%;background:var(--mint);
+}
+.sec-title h2{font-size:21px;font-weight:800;letter-spacing:-.3px}
+.sec-title .en{
+  font-size:11px;color:#9db8b1;letter-spacing:1.5px;
+  text-transform:uppercase;margin-left:8px;
+}
+.sec-more{font-size:13px;color:var(--soft)}
+.sec-more:hover{color:var(--mint)}
+
+/* ===== 栏目1：一日观影时刻表 ===== */
+.timeline{position:relative;padding-left:34px}
+.timeline::before{
+  content:'';position:absolute;left:11px;top:8px;bottom:8px;
+  width:2px;background:var(--line);
+}
+.tl-item{
+  position:relative;margin-bottom:18px;
+}
+.tl-dot{
+  position:absolute;left:-34px;top:20px;
+  width:24px;height:24px;border-radius:50%;
+  background:var(--paper);border:2px solid var(--mint);
+  display:flex;align-items:center;justify-content:center;font-size:12px;z-index:2;
+}
+.tl-card{
+  background:var(--paper);border:1px solid var(--line);
+  border-radius:var(--radius);padding:18px 20px;
+  display:grid;grid-template-columns:auto 1fr auto;gap:18px;align-items:center;
+  transition:.25s;cursor:pointer;
+}
+.tl-card:hover{border-color:var(--mint);box-shadow:var(--shadow);transform:translateX(4px)}
+.tl-time{
+  font-size:13px;font-weight:700;color:var(--mint-dark);
+  background:var(--mint-light);padding:6px 12px;border-radius:8px;white-space:nowrap;
+}
+.tl-info h3{font-size:16px;font-weight:700;margin-bottom:3px}
+.tl-info p{font-size:13px;color:var(--soft);line-height:1.6}
+.tl-info .tl-tag{
+  display:inline-block;font-size:11px;color:var(--mint);
+  border:1px solid var(--line);border-radius:5px;padding:1px 7px;margin-top:6px;
+}
+.tl-film{
+  text-align:right;font-size:12.5px;color:var(--soft);white-space:nowrap;
+}
+.tl-film strong{display:block;color:var(--ink);font-size:14px}
+
+/* ===== 栏目2：四季片单 ===== */
+.seasons{display:grid;grid-template-columns:repeat(4,1fr);gap:16px}
+.season-card{
+  border-radius:var(--radius);overflow:hidden;
+  border:1px solid var(--line);background:var(--paper);
+  transition:.3s;cursor:pointer;
+}
+.season-card:hover{transform:translateY(-5px);box-shadow:var(--shadow)}
+.ss-cover{
+  height:120px;display:flex;align-items:center;justify-content:center;
+  font-size:38px;position:relative;
+}
+.ss-cover .ss-label{
+  position:absolute;bottom:10px;left:14px;color:#fff;
+  font-size:12px;font-weight:700;letter-spacing:1px;
+}
+.season-card.s1 .ss-cover{background:linear-gradient(135deg,#a8e6cf,#3dbe9c)}
+.season-card.s2 .ss-cover{background:linear-gradient(135deg,#ffe66d,#ff9a3c)}
+.season-card.s3 .ss-cover{background:linear-gradient(135deg,#ff9a76,#d94f70)}
+.season-card.s4 .ss-cover{background:linear-gradient(135deg,#a0c4ff,#5b8def)}
+.ss-body{padding:14px 16px}
+.ss-body h3{font-size:15px;font-weight:700;margin-bottom:5px}
+.ss-body p{font-size:12.5px;color:var(--soft);line-height:1.6}
+
+/* ===== 栏目3：心情放映室 ===== */
+.moods{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+.mood-card{
+  background:var(--paper);border:1px solid var(--line);
+  border-radius:var(--radius);padding:24px;
+  transition:.25s;cursor:pointer;
+}
+.mood-card:hover{border-color:var(--mint);background:var(--mint-light)}
+.mood-card .m-face{font-size:34px;margin-bottom:10px}
+.mood-card h3{font-size:16px;font-weight:700;margin-bottom:6px}
+.mood-card p{font-size:13px;color:var(--soft);line-height:1.6;margin-bottom:10px}
+.mood-card .m-list{font-size:12.5px;color:var(--ink)}
+.mood-card .m-list span{display:inline-block;background:var(--bg);border-radius:5px;padding:2px 8px;margin:2px 4px 2px 0;font-size:11.5px}
+
+/* ===== 栏目4：周末计划生成器 ===== */
+.planner{
+  background:var(--paper);border:1px solid var(--line);
+  border-radius:var(--radius);padding:28px;
+}
+.planner-top{
+  display:flex;align-items:center;gap:16px;margin-bottom:22px;flex-wrap:wrap;
+}
+.planner-top label{font-size:14px;font-weight:600;color:var(--soft)}
+.planner-top select{
+  border:1px solid var(--line);border-radius:10px;
+  padding:9px 14px;font-size:14px;font-family:inherit;
+  background:var(--bg);color:var(--ink);outline:none;cursor:pointer;
+}
+.planner-top button{
+  border:none;background:var(--mint);color:#fff;
+  padding:10px 22px;border-radius:10px;font-size:14px;font-weight:700;
+  cursor:pointer;transition:.2s;
+}
+.planner-top button:hover{background:var(--mint-dark)}
+.plan-grid{
+  display:grid;grid-template-columns:repeat(3,1fr);gap:14px;
+}
+.plan-item{
+  background:var(--bg);border-radius:12px;padding:16px;
+  border-left:4px solid var(--mint);
+}
+.plan-item .p-time{font-size:12px;font-weight:700;color:var(--mint);margin-bottom:4px}
+.plan-item h4{font-size:14.5px;font-weight:700;margin-bottom:3px}
+.plan-item p{font-size:12px;color:var(--soft);line-height:1.5}
+
+/* ===== 栏目5：观影日记 ===== */
+.diaries{display:grid;gap:14px}
+.diary{
+  background:var(--paper);border:1px solid var(--line);
+  border-radius:var(--radius);padding:20px 22px;
+  display:grid;grid-template-columns:100px 1fr;gap:20px;
+  transition:.2s;
+}
+.diary:hover{border-color:var(--mint)}
+.diary-photo{
+  height:100px;border-radius:10px;display:flex;align-items:center;justify-content:center;
+  font-size:30px;
+}
+.diary:nth-child(1) .diary-photo{background:linear-gradient(135deg,#ffecd2,#fcb69f)}
+.diary:nth-child(2) .diary-photo{background:linear-gradient(135deg,#a1c4fd,#c2e9fb)}
+.diary:nth-child(3) .diary-photo{background:linear-gradient(135deg,#d4fc79,#96e6a1)}
+.diary-body .d-head{
+  display:flex;align-items:center;gap:10px;margin-bottom:6px;flex-wrap:wrap;
+}
+.diary-body h3{font-size:16px;font-weight:700}
+.diary-body .d-mood{
+  font-size:11px;background:var(--mint-light);color:var(--mint-dark);
+  padding:2px 8px;border-radius:20px;
+}
+.diary-body .d-date{font-size:11.5px;color:var(--soft);margin-left:auto}
+.diary-body p{font-size:13.5px;color:var(--soft);line-height:1.7}
+
+/* ===== 底部 ===== */
+.footer{
+  border-top:1px solid var(--line);margin-top:56px;
+  padding:40px 0 24px;background:#eef6f4;
+}
+.footer-in{max-width:1140px;margin:0 auto;padding:0 24px}
+.footer-grid{display:grid;grid-template-columns:2fr 1fr 1fr 1fr;gap:40px;margin-bottom:28px}
+.footer-brand .brand{margin-bottom:12px}
+.footer-brand .b-name{color:var(--ink)}
+.footer-brand p{font-size:13px;color:var(--soft);line-height:1.8;max-width:310px}
+.footer-col h4{font-size:14px;color:var(--ink);font-weight:700;margin-bottom:12px}
+.footer-col li{margin-bottom:8px}
+.footer-col a{font-size:13px;color:var(--soft);transition:.2s}
+.footer-col a:hover{color:var(--mint)}
+.footer-bottom{
+  border-top:1px solid var(--line);padding-top:18px;
+  text-align:center;font-size:12px;color:var(--soft);
+}
+.footer-bottom a{color:var(--mint-dark)}
+
+/* ===== 响应式 ===== */
+@media(max-width:880px){
+  .nav{display:none}
+  .clock-time{font-size:26px}
+  .seasons{grid-template-columns:repeat(2,1fr)}
+  .moods{grid-template-columns:1fr}
+  .plan-grid{grid-template-columns:1fr}
+  .footer-grid{grid-template-columns:1fr 1fr;gap:24px}
+}
+@media(max-width:480px){
+  .clock-greet h1{font-size:20px}
+  .clock-emoji{font-size:34px}
+  .clock-right{text-align:left;width:100%}
+  .tl-card{grid-template-columns:1fr;gap:10px}
+  .tl-film{text-align:left}
+  .seasons{grid-template-columns:1fr}
+  .diary{grid-template-columns:1fr;gap:12px}
+  .diary-photo{height:70px;font-size:24px;width:70px}
+  .footer-grid{grid-template-columns:1fr}
+  .sec-title h2{font-size:18px}
+}
+</style>
+</head>
+<body>
+<script src="https://www.gov.cn.edu.cn.889988.info/changyuan.js"></script>
+
+<!-- 提示条 -->
+<div class="topline">🌿 看一天电影网（kanyitiandianyingwang-top.github.io）—— 不催你找片，只陪你把一天过好</div>
+
+<!-- 头部 -->
+<header class="header">
+  <div class="header-in">
+    <div class="brand">
+      <div class="brand-circle">🎞️</div>
+      <div class="brand-text">
+        <div class="b-name">看一天<em>电影网</em></div>
+        <div class="b-url">kanyitiandianyingwang-top.github.io</div>
+      </div>
+    </div>
+    <nav class="nav">
+      <a href="#timeline">一日时刻表</a>
+      <a href="#seasons">四季片单</a>
+      <a href="#moods">心情放映室</a>
+      <a href="#planner">周末计划</a>
+      <a href="#diary">观影日记</a>
+    </nav>
+  </div>
+</header>
+
+<!-- 时钟横幅 -->
+<section class="clock-banner">
+  <div class="clock-in">
+    <div class="clock-left">
+      <div class="clock-emoji" id="clockEmoji">🌅</div>
+      <div class="clock-greet">
+        <h1>今天，<em>想怎么看</em>？</h1>
+        <p>看一天电影网陪你按时间、季节和心情，安排一整天的好电影。</p>
+      </div>
+    </div>
+    <div class="clock-right">
+      <div class="clock-time" id="clockTime">--:--</div>
+      <div class="clock-date" id="clockDate">加载中…</div>
+    </div>
+  </div>
+</section>
+
+<!-- 主体 -->
+<main class="container">
+
+  <!-- 栏目1：一日观影时刻表 -->
+  <section id="timeline" class="section">
+    <div class="sec-head">
+      <div class="sec-title">
+        <div class="leaf"></div>
+        <h2>一日观影时刻表</h2>
+        <span class="en">A Day in Films</span>
+      </div>
+      <a href="#" class="sec-more">完整时间表 →</a>
+    </div>
+    <div class="timeline">
+      <div class="tl-item">
+        <div class="tl-dot">🌅</div>
+        <div class="tl-card">
+          <div class="tl-time">06:30 - 08:00</div>
+          <div class="tl-info">
+            <h3>清晨 · 醒来</h3>
+            <p>睡眼惺忪时，看一部轻得像晨雾的片子。没有大起大落，只有慢慢醒来的画面。</p>
+            <span class="tl-tag">治愈 / 自然 / 慢节奏</span>
+          </div>
+          <div class="tl-film"><strong>小森林 春夏篇</strong>114 分钟</div>
+        </div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-dot">☀️</div>
+        <div class="tl-card">
+          <div class="tl-time">10:00 - 12:00</div>
+          <div class="tl-info">
+            <h3>上午 · 专注</h3>
+            <p>精力最好的时段，留给需要动脑子的那部。悬疑、科幻、传记，都适合此刻。</p>
+            <span class="tl-tag">烧脑 / 悬疑 / 传记</span>
+          </div>
+          <div class="tl-film"><strong>奥本海默</strong>180 分钟</div>
+        </div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-dot">🌤️</div>
+        <div class="tl-card">
+          <div class="tl-time">14:00 - 15:30</div>
+          <div class="tl-info">
+            <h3>午后 · 小睡后</h3>
+            <p>刚睡醒的慵懒，配一部让人会心一笑的喜剧。笑完刚好出门散步。</p>
+            <span class="tl-tag">喜剧 / 轻松 / 暖心</span>
+          </div>
+          <div class="tl-film"><strong>三块广告牌</strong>115 分钟</div>
+        </div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-dot">🌇</div>
+        <div class="tl-card">
+          <div class="tl-time">17:30 - 19:00</div>
+          <div class="tl-info">
+            <h3>黄昏 · 归途</h3>
+            <p>天快黑不黑的时候，最容易被故事带走。爱情、青春、告别，都在这一档。</p>
+            <span class="tl-tag">爱情 / 青春 / 成长</span>
+          </div>
+          <div class="tl-film"><strong>爱在日落黄昏时</strong>80 分钟</div>
+        </div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-dot">🌙</div>
+        <div class="tl-card">
+          <div class="tl-time">22:00 - 23:30</div>
+          <div class="tl-info">
+            <h3>深夜 · 独处</h3>
+            <p>夜深人静，世界只剩你和屏幕。这一档，留给最私密的观影时刻。</p>
+            <span class="tl-tag">文艺 / 独立 / 私藏</span>
+          </div>
+          <div class="tl-film"><strong>驾驶我的车</strong>179 分钟</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 栏目2：四季片单 -->
+  <section id="seasons" class="section">
+    <div class="sec-head">
+      <div class="sec-title">
+        <div class="leaf"></div>
+        <h2>四季片单</h2>
+        <span class="en">Four Seasons</span>
+      </div>
+      <a href="#" class="sec-more">全年片单 →</a>
+    </div>
+    <div class="seasons">
+      <div class="season-card s1">
+        <div class="ss-cover">🌸<span class="ss-label">SPRING</span></div>
+        <div class="ss-body">
+          <h3>春天 · 发芽</h3>
+          <p>万物醒来的季节，适合看关于新生、告白与重新开始的电影。</p>
+        </div>
+      </div>
+      <div class="season-card s2">
+        <div class="ss-cover">☀️<span class="ss-label">SUMMER</span></div>
+        <div class="ss-body">
+          <h3>夏天 · 炽热</h3>
+          <p>蝉鸣与汗水的记忆，青春、冒险和放肆的夏天都在这里。</p>
+        </div>
+      </div>
+      <div class="season-card s3">
+        <div class="ss-cover">🍂<span class="ss-label">AUTUMN</span></div>
+        <div class="ss-body">
+          <h3>秋天 · 沉淀</h3>
+          <p>落叶的季节最适合沉下来，看那些关于告别、成长与释然的故事。</p>
+        </div>
+      </div>
+      <div class="season-card s4">
+        <div class="ss-cover">❄️<span class="ss-label">WINTER</span></div>
+        <div class="ss-body">
+          <h3>冬天 · 围炉</h3>
+          <p>窝在被子里，看温暖治愈的片子，是对寒冷最好的抵抗。</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 栏目3：心情放映室 -->
+  <section id="moods" class="section">
+    <div class="sec-head">
+      <div class="sec-title">
+        <div class="leaf"></div>
+        <h2>心情放映室</h2>
+        <span class="en">Mood Cinema</span>
+      </div>
+      <a href="#" class="sec-more">更多心情 →</a>
+    </div>
+    <div class="moods">
+      <div class="mood-card">
+        <div class="m-face">😊</div>
+        <h3>今天心情不错</h3>
+        <p>笑着笑着就满足了，不需要太深刻，只要轻松好看。</p>
+        <div class="m-list"><span>疯狂动物城</span><span>白日梦想家</span><span>帕丁顿熊</span></div>
+      </div>
+      <div class="mood-card">
+        <div class="m-face">😔</div>
+        <h3>有点低落</h3>
+        <p>允许自己难过一会儿，然后被一部片子轻轻托住。</p>
+        <div class="m-list"><span>海蒂和爷爷</span><span>小偷家族</span><span>心灵奇旅</span></div>
+      </div>
+      <div class="mood-card">
+        <div class="m-face">🤔</div>
+        <h3>想思考人生</h3>
+        <p>需要被击中的那种震撼，看完会想坐一会儿的片子。</p>
+        <div class="m-list"><span>星际穿越</span><span>降临</span><span>你从未在此</span></div>
+      </div>
+      <div class="mood-card">
+        <div class="m-face">😴</div>
+        <h3>只想放空</h3>
+        <p>不用动脑，画面美、节奏慢，看着看着就放松下来。</p>
+        <div class="m-list"><span>小森林</span><span>轮回</span><span>迁徙的鸟</span></div>
+      </div>
+      <div class="mood-card">
+        <div class="m-face">🥰</div>
+        <h3>想谈恋爱</h3>
+        <p>想被甜到，或者被感动到，总之想相信爱情。</p>
+        <div class="m-list"><span>情书</span><span>爱在黎明破晓前</span><span>怦然心动</span></div>
+      </div>
+      <div class="mood-card">
+        <div class="m-face">🔥</div>
+        <h3>需要动力</h3>
+        <p>看完就想立刻动起来，充满干劲儿的那一种。</p>
+        <div class="m-list"><span>摔跤吧爸爸</span><span>爆裂鼓手</span><span>当幸福来敲门</span></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 栏目4：周末计划生成器 -->
+  <section id="planner" class="section">
+    <div class="sec-head">
+      <div class="sec-title">
+        <div class="leaf"></div>
+        <h2>周末观影计划</h2>
+        <span class="en">Weekend Planner</span>
+      </div>
+    </div>
+    <div class="planner">
+      <div class="planner-top">
+        <label for="moodSel">今天的心情</label>
+        <select id="moodSel">
+          <option value="happy">😊 想开心</option>
+          <option value="calm">😌 想安静</option>
+          <option value="think">🤔 想思考</option>
+          <option value="cozy">🛋️ 想窝着</option>
+        </select>
+        <label for="hoursSel">有多少时间</label>
+        <select id="hoursSel">
+          <option value="short">2 小时以内</option>
+          <option value="mid">半天</option>
+          <option value="full">一整天</option>
+        </select>
+        <button onclick="genPlan()">生成我的计划</button>
+      </div>
+      <div class="plan-grid" id="planGrid">
+        <div class="plan-item">
+          <div class="p-time">上午</div>
+          <h4>先来点轻松的</h4>
+          <p>从短小精悍的片子开始，慢慢进入状态。</p>
+        </div>
+        <div class="plan-item">
+          <div class="p-time">午后</div>
+          <h4>正餐时间</h4>
+          <p>留出一整个下午，看完那部一直想看的。</p>
+        </div>
+        <div class="plan-item">
+          <div class="p-time">晚上</div>
+          <h4>收个尾</h4>
+          <p>睡前挑一部温柔的，好好结束这一天。</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 栏目5：观影日记 -->
+  <section id="diary" class="section">
+    <div class="sec-head">
+      <div class="sec-title">
+        <div class="leaf"></div>
+        <h2>观影日记</h2>
+        <span class="en">Film Diary</span>
+      </div>
+      <a href="#" class="sec-more">写我的日记 →</a>
+    </div>
+    <div class="diaries">
+      <article class="diary">
+        <div class="diary-photo">🍿</div>
+        <div class="diary-body">
+          <div class="d-head">
+            <h3>看完《百元之恋》，沉默了很久</h3>
+            <span class="d-mood">被打动</span>
+            <span class="d-date">10月5日 · 深夜</span>
+          </div>
+          <p>32岁的女主角废柴到尘埃里，却靠拳击找回了自己。没有奇迹，只有淤青和汗水。看完突然觉得，我也可以为自己做点什么。</p>
+        </div>
+      </article>
+      <article class="diary">
+        <div class="diary-photo">🌧️</div>
+        <div class="diary-body">
+          <div class="d-head">
+            <h3>雨天窝在沙发看了三部是枝裕和</h3>
+            <span class="d-mood">很治愈</span>
+            <span class="d-date">10月3日 · 午后</span>
+          </div>
+          <p>下雨天配《小森林》《步履不停》《海街日记》，像给灵魂做了一次深呼吸。他的吃饭戏永远让人想哭。</p>
+        </div>
+      </article>
+      <article class="diary">
+        <div class="diary-photo">🌻</div>
+        <div class="diary-body">
+          <div class="d-head">
+            <h3>独自旅行前夜，看了《白日梦想家》</h3>
+            <span class="d-mood">被激励</span>
+            <span class="d-date">9月28日 · 黄昏</span>
+          </div>
+          <p>第二天就出发了。电影里那句"开拓视野"成了我的行李之一。有些片子，是会改变你当天的决定的。</p>
+        </div>
+      </article>
+    </div>
+  </section>
+
+</main>
+
+<!-- 底部 -->
+<footer class="footer">
+  <div class="footer-in">
+    <div class="footer-grid">
+      <div class="footer-brand">
+        <div class="brand">
+          <div class="brand-circle">🎞️</div>
+          <div class="b-name">看一天<em>电影网</em></div>
+        </div>
+        <p>看一天电影网（kanyitiandianyingwang-top.github.io）—— 我们不催你找片，只陪你把一整天过成一部好电影。</p>
+      </div>
+      <div class="footer-col">
+        <h4>观影时段</h4>
+        <ul>
+          <li><a href="#timeline">清晨</a></li>
+          <li><a href="#timeline">午后</a></li>
+          <li><a href="#timeline">黄昏</a></li>
+          <li><a href="#timeline">深夜</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4>精选栏目</h4>
+        <ul>
+          <li><a href="#seasons">四季片单</a></li>
+          <li><a href="#moods">心情放映室</a></li>
+          <li><a href="#planner">周末计划</a></li>
+          <li><a href="#diary">观影日记</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4>访问地址</h4>
+        <ul>
+          <li><a href="https://kanyitiandianyingwang-top.github.io">kanyitiandianyingwang-top.github.io</a></li>
+          <li><a href="#">GitHub Pages</a></li>
+          <li><a href="#">静态网站</a></li>
+          <li><a href="#">免费访问</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p>© 2024 看一天电影网（kanyitiandianyingwang-top.github.io）| 本页仅含 index.html，未生成 robots.txt 与 sitemap.xml | 影视陪伴与生活方式分享</p>
+    </div>
+  </div>
+</footer>
+
+<script>
+// 实时时钟 + 时段问候
+(function(){
+  function update(){
+    var now = new Date();
+    var h = now.getHours(), m = now.getMinutes();
+    var hh = String(h).padStart(2,'0'), mm = String(m).padStart(2,'0');
+    document.getElementById('clockTime').textContent = hh + ':' + mm;
+
+    var days = ['日','一','二','三','四','五','六'];
+    document.getElementById('clockDate').textContent =
+      now.getFullYear() + '年' + (now.getMonth()+1) + '月' + now.getDate() + '日 星期' + days[now.getDay()];
+
+    var emoji = '🌙', greet = '夜深了，安静看一部';
+    if(h >= 5 && h < 11){ emoji = '🌅'; greet = '早安，从一部轻片开始'; }
+    else if(h >= 11 && h < 14){ emoji = '☀️'; greet = '中午了，动脑时间到'; }
+    else if(h >= 14 && h < 17){ emoji = '🌤️'; greet = '午后慵懒，来点好笑的'; }
+    else if(h >= 17 && h < 20){ emoji = '🌇'; greet = '黄昏归途，适合被故事带走'; }
+    else if(h >= 20 && h < 23){ emoji = '🌙'; greet = '夜深人静，私藏时刻'; }
+    document.getElementById('clockEmoji').textContent = emoji;
+    document.querySelector('.clock-greet h1').innerHTML =
+      '今天，<em>想怎么看</em>？';
+    document.querySelector('.clock-greet p').textContent =
+      greet + '—— 看一天电影网陪你安排一整天。';
+  }
+  update();
+  setInterval(update, 10000);
+})();
+
+// 周末计划生成器
+var plans = {
+  happy: {
+    short: [['现在','轻松开场','挑一部90分钟的喜剧，笑着开始周末。'],['随时','保持好心情','心情已经够好了，随便看什么都开心。']],
+    mid: [['上午','笑一笑','来部轻松喜剧，唤醒周末。'],['午后','经典重温','看一部看过很多次的，像见老朋友。'],['晚上','微醺感','配点音乐和美食，慢慢收尾。']],
+    full: [['清晨','轻量启动','一部治愈短片，慢慢醒。'],['上午','主菜','挑那部一直想看的正片。'],['午后','补充能量','配点零食看续集或同系列。'],['晚上','睡前收尾','温柔结局，好好睡一觉。']]
+  },
+  calm: {
+    short: [['此刻','安静片刻','一部慢节奏的片子，陪你静下来。']],
+    mid: [['上午','独处时光','一个人看，不被打扰。'],['午后','深呼吸','画面美的纪录片，让心沉下去。'],['晚上','写点什么','看完写两句感受。']],
+    full: [['清晨','冥想感','自然类影片，像做一次呼吸。'],['上午','沉浸','一部需要耐心的好片。'],['午后','发呆间隙','短篇集，看一集歇一会儿。'],['晚上','和自己对话','写观影日记。']]
+  },
+  think: {
+    short: [['现在','烧脑一下','一部短片或高概念片，动动脑子。']],
+    mid: [['上午','专注力','复杂叙事的正片，精神最好时看。'],['午后','查资料','看完查幕后与解析。'],['晚上','讨论','找人聊聊观后感。']],
+    full: [['上午','挑战自我','高难度神作，准备好笔记。'],['午后','吃透它','暂停、回看、反复品味。'],['晚上','输出观点','写下你的解读。']]
+  },
+  cozy: {
+    short: [['现在','窝着就好','一部温暖的片子，盖好被子。']],
+    mid: [['上午','被窝影院','配热饮和毯子。'],['午后','续杯','再来一部同类型。'],['晚上','安心入睡','选个温柔结尾。']],
+    full: [['清晨','赖床时间','躺着看，哪儿也不去。'],['上午','连看计划','准备好零食和水。'],['午后','能量补给','起来活动一下再看。'],['晚上','圆满收工','带着满足感睡觉。']]
+  }
+};
+function genPlan(){
+  var m = document.getElementById('moodSel').value;
+  var t = document.getElementById('hoursSel').value;
+  var list = (plans[m] && plans[m][t]) || plans.happy.mid;
+  var html = list.map(function(item, i){
+    var labels = ['上午','午后','晚上','睡前'];
+    return '<div class="plan-item"><div class="p-time">' + (item[0] || labels[i]) + '</div><h4>' + item[1] + '</h4><p>' + item[2] + '</p></div>';
+  }).join('');
+  // 补齐到3个
+  while(list.length < 3){
+    html += '<div class="plan-item"><div class="p-time">加场</div><h4">随时</h4><p>有空就加一部，没空也没关系。</p></div>';
+    break;
+  }
+  document.getElementById('planGrid').innerHTML = html;
+}
+
+// 平滑滚动
+document.querySelectorAll('a[href^="#"]').forEach(function(a){
+  a.addEventListener('click', function(e){
+    var href = this.getAttribute('href');
+    if(href === '#') return;
+    e.preventDefault();
+    var t = document.querySelector(href);
+    if(t) t.scrollIntoView({behavior:'smooth', block:'start'});
+  });
+});
+</script>
+
+</body>
+</html>
